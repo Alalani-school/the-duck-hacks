@@ -132,59 +132,69 @@ navigator.clipboard.writeText(script).then(() => {
     boxShadow: '0 0 10px rgba(0,0,0,0.5)'
   });
 
-  ui.innerHTML = `
+  ui.innerHTML = \`
     <h3 style="text-align:center; margin:0 0 10px 0; font-size:16px;">Debug Panel</h3>
 
     <label>Coins: <span id="coin-display">0</span></label>
     <input type="range" id="coin-slider" min="0" max="1000000000000" value="0" step="1" style="width:100%; margin-top:5px;">
 
-    <label for="disable-autoclick" style="cursor:pointer;">
-    <input type="checkbox" id="disable-autoclick">Disable Autoclick Detection</label>
+    <label style="cursor:pointer;">
+      <input type="checkbox" id="disable-autoclick">Disable Autoclick Detection
+    </label>
     <br>
-    <label for="unban" style="cursor:pointer;">
-    <input type="checkbox" id="unban">Unban!</label>
-    <br><br>
-
-    <label>Unlock Duck:</label>
-    <select id="duck-select" style="width:100%; margin-top:5px;">
-      
-    </select>
-
+    <label style="cursor:pointer;">
+      <input type="checkbox" id="unban">Unban!
+    </label>
     <br><br>
 
     <button id="apply-btn" style="width:100%; background:#0f0; color:#000; font-weight:bold; cursor:pointer; margin-top:5px;">Apply Changes</button>
-  `;
+  \`;
 
   document.body.appendChild(ui);
+
   const coinSlider = document.getElementById('coin-slider');
   const coinDisplay = document.getElementById('coin-display');
   const autoClick = document.getElementById("disable-autoclick");
-  const duckSelect = document.getElementById('duck-select');
-  const unban = document.getElementById("unban")
+  const unban = document.getElementById("unban");
   const applyBtn = document.getElementById('apply-btn');
+
   coinSlider.addEventListener('input', () => {
     coinDisplay.textContent = coinSlider.value;
   });
+
   applyBtn.addEventListener('click', () => {
-    let data = JSON.parse(decodeURIComponent(atob(localStorage.getItem('duckV12Accounts'))));
-    if(autoClick.value) {
+    let raw = localStorage.getItem('duckV12Accounts');
+    let data = raw ? JSON.parse(decodeURIComponent(atob(raw))) : {};
+
+    if (autoClick.checked) {
       window.a83ndk29 = () => false;
     }
-    if(unban.checked) {
-      for (let user in accounts) {
-        accounts[user].saveData.banned = false;
+
+    if (unban.checked) {
+      for (let user in data) {
+        if (data[user]?.saveData) {
+          data[user].saveData.banned = false;
+        }
       }
     }
-    saveFile.coins = parseInt(coinSlider.value);
-    localStorage.setItem('duckV12Accounts', e82jf93k(accounts));
-    s92jd84n();
+
+    if (typeof saveFile !== "undefined") {
+      saveFile.coins = Number(coinSlider.value) || 0;
+    }
+
+    localStorage.setItem('duckV12Accounts', btoa(encodeURIComponent(JSON.stringify(data))));
+
+    if (typeof s92jd84n === "function") {
+      s92jd84n();
+    }
+
     alert("Changes applied!");
   });
-})();`
+})();`;
       navigator.clipboard.writeText(script).then(() => {
-}).catch(err => {
-  console.error('Failed to copy:', err);
-});
+      }).catch(err => {
+          console.error('Failed to copy:', err);
+      });
       alert("Copied the hack to your clipboard! Please navigate to pressonion.github.io/DUCK-RNG to use the hack");
     }
       
