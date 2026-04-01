@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<head>
+  <title>The Duck Hacks</title>
+</head>
+<body>
+  <h1>Welcome to the duck hacks</h1>
+  <h3>
+    Defender's Realm hacks
+  </h3>
+  <p><button onclick="defendersRealm()">Copy Hack</button></p>
+  <script>
+    function defendersRealm() {
+      const script = `(function() {
+  const ui = document.createElement('div');
+  ui.id = 'debug-ui';
+  Object.assign(ui.style, {
+    position: 'fixed',
+    top: '20px',
+    right: '20px',
+    background: '#222',
+    color: '#fff',
+    padding: '20px',
+    borderRadius: '10px',
+    zIndex: '9999',
+    width: '200px',
+    fontFamily: 'Arial, sans-serif',
+    boxShadow: '0 0 10px rgba(0,0,0,0.5)'
+  });
+
+  ui.innerHTML = \`
+    <h3 style="text-align:center; margin:0 0 10px 0; font-size:16px;">Debug Panel</h3>
+    <label>Coins: <span id="coin-display">0</span></label>
+    <input type="range" id="coin-slider" min="0" max="1000000000000" value="0" step="1" style="width:100%; margin-top:5px;">
+    <label>Shards: <span id="shard-display">0</span></label>
+    <input type="range" id="shard-slider" min="0" max="10000000" value="0" step="1" style="width:100%; margin-top:5px;">
+    <br><br>
+    <label>Hero Unlock:</label>
+    <select id="hero-select" style="width:100%; margin-top:5px;">
+      <option value="peasant">peasant</option>
+      <option value="militia">militia</option>
+      <option value="archer">archer</option>
+      <option value="squire">squire</option>
+      <option value="trapper">trapper</option>
+      <option value="knight">knight</option>
+      <option value="hunter">hunter</option>
+      <option value="sniper">sniper</option>
+      <option value="ninja">ninja</option>
+      <option value="mage">mage</option>
+      <option value="gunner">gunner</option>
+      <option value="berserker">berserker</option>
+      <option value="paladin">paladin</option>
+      <option value="pyro">pyro</option>
+      <option value="frost">frost</option>
+      <option value="assassin">assassin</option>
+      <option value="warden">warden</option>
+      <option value="engineer">engineer</option>
+      <option value="bloodmage">bloodmage</option>
+      <option value="beastmaster">beastmaster</option>
+      <option value="necro">necro</option>
+      <option value="valkyrie">valkyrie</option>
+      <option value="dragon">dragon</option>
+      <option value="mech">mech</option>
+      <option value="phantom">phantom</option>
+      <option value="storm">storm</option>
+      <option value="zeus">zeus</option>
+      <option value="timeweaver">timeweaver</option>
+      <option value="jester">jester</option>
+      <option value="sungod">sungod</option>
+    </select>
+    <br><br>
+    <button id="apply-btn" style="width:100%; background:#0f0; color:#000; font-weight:bold; cursor:pointer; margin-top:5px;">Apply Changes</button>
+  \`;
+
+  document.body.appendChild(ui);
+  const coinSlider = document.getElementById('coin-slider');
+  const shardDisplay = document.getElementById('shard-display');
+  const shardSlider = document.getElementById('shard-slider');
+  const coinDisplay = document.getElementById('coin-display');
+  const heroSelect = document.getElementById('hero-select');
+  const applyBtn = document.getElementById('apply-btn');
+  coinSlider.addEventListener('input', () => { coinDisplay.textContent = coinSlider.value; });
+  shardSlider.addEventListener('input', () => { shardDisplay.textContent = shardSlider.value; });
+  applyBtn.addEventListener('click', () => {
+    let data = localStorage.getItem('dotr_save');
+    if(data) {
+      data = JSON.parse(data);
+      if(!data.unlocked.includes(heroSelect.value)) {
+        data.unlocked.push(heroSelect.value);
+        data.shards = shardSlider.value;
+        localStorage.setItem('dotr_save', JSON.stringify(data));
+      }
+    } else {
+      data = JSON.parse('{"shards":100,"unlocked":["militia"],"equipped":["militia"]}');
+      if(!data.unlocked.includes(heroSelect.value)) {
+        data.unlocked.push(heroSelect.value);
+        data.shards = shardSlider.value;
+        localStorage.setItem('dotr_save', JSON.stringify(data));
+      }
+    }
+    gameEnv.gold = Number(coinSlider.value);
+    player.unlocked = data.unlocked;
+    player.equipped = data.equipped;
+    player.shards = data.shards;
+    updateShardsUI();
+    alert("Changes applied!");
+  });
+})();`;
+
+navigator.clipboard.writeText(script).then(() => {
+}).catch(err => {
+  console.error('Failed to copy:', err);
+});
+      alert("Copied the hack to your clipboard! Please navigate to pressonion.github.io/Defenders-Realm to use the hack");
+    }
+  </script>
+</body>
